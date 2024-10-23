@@ -1,0 +1,69 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: card_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - card-distribution
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: card-dist-backend
+    image: card-dist-backend
+    restart: unless-stopped
+    working_dir: /var/www
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./backend:/var/www
+    depends_on:
+      - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=card_db
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
+    command: >
+      sh -c "
+      php artisan migrate:fresh --force &&
+      php artisan db:seed --class=CardSeeder --force &&
+      php-fpm"
+    networks:
+      - card-distribution
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: card-dist-frontend
+    image: card-dist-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+    networks:
+      - card-distribution
+
+networks:
+  card-distribution:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
