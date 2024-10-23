@@ -42,9 +42,6 @@ jobs:
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       working-directory: ./backend
-
-    - name: Run Laravel Migration and Seeder
-      run: php artisan migrate:fresh && php artisan db:seed --class=CardSeeder
     
     - name: Run backend tests
       run: php artisan test
