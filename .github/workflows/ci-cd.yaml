@@ -22,8 +22,6 @@ jobs:
           MYSQL_DATABASE: card_db
           MYSQL_USER: user
           MYSQL_PASSWORD: password
-        ports:
-          - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping -h localhost"
           --health-interval=30s
