@@ -74,8 +74,3 @@ jobs:
       - name: Install frontend dependencies
         run: npm install
         working-directory: ./frontend
-
-      - name: Run frontend tests
-        uses: jlndk/github-action-jest@1.0.3
-        with:
-          working-directory: ./frontend

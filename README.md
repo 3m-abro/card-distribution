@@ -50,7 +50,7 @@ The project follows a modern microservices architecture with separate backend an
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/3m-abro/card-distribution 
+git clone https://github.com/3m-abro/card-distribution.git 
 cd card-distribution
 ```
 
